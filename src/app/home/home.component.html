@@ -2,14 +2,14 @@
 
 <div id="wraper">
   <div class="container color-dark" [@images]="images.length">
-  <div *ngFor="let image of images" class="col">
-    <img (click)="zoomMe(image)" src="{{ image.src }}" alt="" />
+  <div *ngFor="let image of images, let i = index" class="col">
+    <img (click)="zoomMe(image, i)" src="{{ image.src }}" alt="" />
   </div>
 </div>
 <div class="panes" [@slide]="activePane">
   <div *ngIf="zoomImage">
     <img [@imgZoom]='zoomImage.state' (click)="zoomMeMore(zoomImage)" src="{{zoomImage.src}}" alt="" /><br>
-    <a href="#" (click)="backslide();">back</a>
+    <a href="#" (click)="preImg();">&lt; Prev</a> &nbsp; <a href="#" (click)="backslide();">back</a> &nbsp; <a href="#" (click)="nxtImg();">Next &gt;</a>
   </div>
 </div>
 </div>

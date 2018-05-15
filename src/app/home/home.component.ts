@@ -43,9 +43,11 @@ export class HomeComponent implements OnInit {
 images = IMAGES;
 zoomImage:Image;
 activePane: string = 'left';
-zoomMe(image) {
+currIndex:number;
+zoomMe(image, i) {
       this.zoomImage = image;
       this.activePane = 'right';
+      this.currIndex = i;
   }
   backslide(){
     this.activePane = "left";
@@ -53,6 +55,20 @@ zoomMe(image) {
   }
   zoomMeMore(image) {
     image.state = (image.state === 'small' ? 'large' : 'small');
+  }
+  preImg(){
+    if(this.currIndex > 0){
+      this.currIndex = this.currIndex -1;
+      this.zoomImage = this.images[this.currIndex];
+    }
+    return false;
+  }
+  nxtImg(){
+    if(this.currIndex < this.images.length-1){
+        this.currIndex = this.currIndex +1;
+        this.zoomImage = this.images[this.currIndex];
+    }
+    return false;
   }
   constructor() { }
 
