@@ -8,7 +8,10 @@
 </div>
 <div class="panes" [@slide]="activePane">
   <div *ngIf="zoomImage">
-    <img @show [@imgZoom]='zoomImage.state' (click)="zoomMeMore(zoomImage)" src="{{zoomImage.src}}" alt="" /><br>
+    <div [@fade]="fadeState" (@fade.done)="onDone($event)" >
+    <img @show [@imgZoom]='zoomImage.state' (click)="zoomMeMore(zoomImage)" src="{{zoomImage.src}}" alt="" />
+    </div>
+    <br>
     <a *ngIf="currIndex>0" href="#" (click)="preImg();">&lt; Prev</a> &nbsp; <a href="#" (click)="backslide();">back</a> &nbsp; <a href="#" *ngIf="currIndex<totalImages-1" (click)="nxtImg();">Next &gt;</a>
   </div>
 </div>

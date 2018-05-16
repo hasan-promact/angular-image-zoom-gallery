@@ -40,8 +40,17 @@ type PaneType = 'left' | 'right';
     trigger('fade', [
     state('in', style({ 'opacity': '1' })),
     state('out', style({ 'opacity': '0' })),
-    transition('* <=> *', [
-      animate(1000)
+    transition('in => out', [
+      animate('.6s ease-out', keyframes([
+            style({opacity: 1, transform: 'translateX(0)', offset: 0}),
+            style({opacity: 0, transform: 'translateX(-25%)',     offset: 1.0}),
+          ]))
+    ]),
+    transition('out => in', [
+      animate('.6s ease-in', keyframes([
+            style({opacity: 0, transform: 'translateX(25%)', offset: 0}),
+            style({opacity: 1, transform: 'translateX(0%)',     offset: 1.0}),
+          ]))
     ])
   ]),
      trigger('slide', [
@@ -68,20 +77,20 @@ activePane: string = 'left';
 currIndex:number;
 autoSlide:number;
 totalImages:number = this.images.length;
+fadeState:string = "in";
 
 zoomMe(image, i) {
       this.zoomImage = image;
       this.activePane = 'right';
       this.currIndex = i;
       this.autoSlide= setInterval( () => {
+        this.fadeState = "out";
         if(this.currIndex < this.images.length-1){
         this.currIndex = this.currIndex +1;
     }else{
       this.currIndex = 0;
     }
-    this.zoomImage = this.images[this.currIndex];
-    
-    this.ref.markForCheck();
+        this.ref.markForCheck();
       },4000);
   }
   backslide(){
@@ -96,18 +105,16 @@ zoomMe(image, i) {
   preImg(){
     clearInterval(this.autoSlide);
     if(this.currIndex > 0){
-      
+      this.fadeState = "out";
       this.currIndex = this.currIndex -1;
-      this.zoomImage = this.images[this.currIndex];
-      
     }
     return false;
   }
   nxtImg(){
     clearInterval(this.autoSlide);
+    this.fadeState = "out";
     if(this.currIndex < this.images.length-1){
         this.currIndex = this.currIndex +1;
-        this.zoomImage = this.images[this.currIndex];
     }
     return false;
   }
@@ -116,6 +123,15 @@ zoomMe(image, i) {
  }
 
   ngOnInit() {
+  }
+ onDone($event) {
+   if($event.fromState== "in"){
+    
+    this.zoomImage = this.images[this.currIndex];
+    
+    this.ref.markForCheck();
+    this.fadeState = "in";
+  }
   }
 
 }
