@@ -40,15 +40,28 @@ type PaneType = 'left' | 'right';
     trigger('fade', [
     state('in', style({ 'opacity': '1' })),
     state('out', style({ 'opacity': '0' })),
+    state('outp', style({ 'opacity': '0' })),
     transition('in => out', [
-      animate('.6s ease-out', keyframes([
+      animate('200ms ease-out', keyframes([
             style({opacity: 1, transform: 'translateX(0)', offset: 0}),
             style({opacity: 0, transform: 'translateX(-25%)',     offset: 1.0}),
           ]))
     ]),
     transition('out => in', [
-      animate('.6s ease-in', keyframes([
+      animate('200ms ease-in', keyframes([
             style({opacity: 0, transform: 'translateX(25%)', offset: 0}),
+            style({opacity: 1, transform: 'translateX(0%)',     offset: 1.0}),
+          ]))
+    ]),
+    transition('in => outp', [
+      animate('200ms ease-out', keyframes([
+            style({opacity: 1, transform: 'translateX(0)', offset: 0}),
+            style({opacity: 0, transform: 'translateX(25%)',     offset: 1.0}),
+          ]))
+    ]),
+    transition('outp => in', [
+      animate('200ms ease-in', keyframes([
+            style({opacity: 0, transform: 'translateX(-25%)', offset: 0}),
             style({opacity: 1, transform: 'translateX(0%)',     offset: 1.0}),
           ]))
     ])
@@ -57,16 +70,6 @@ type PaneType = 'left' | 'right';
       state('left', style({ transform: 'translateX(100%)' })),
       state('right', style({ transform: 'translateX(0%)' })),
       transition('* => *', animate(300))
-    ]),
-   trigger('show', [
-        transition(':enter', [
-            style({ opacity: 0 }),
-            animate(200, style({ opacity: 1 }))
-        ]),
-        transition(':leave', [
-            style({ opacity: 1 }),
-            animate(300, style({ opacity: 0 }))
-        ])
     ])
   ]
 })
@@ -105,7 +108,7 @@ zoomMe(image, i) {
   preImg(){
     clearInterval(this.autoSlide);
     if(this.currIndex > 0){
-      this.fadeState = "out";
+      this.fadeState = "outp";
       this.currIndex = this.currIndex -1;
     }
     return false;
@@ -125,7 +128,9 @@ zoomMe(image, i) {
   ngOnInit() {
   }
  onDone($event) {
-   if($event.fromState== "in"){
+   console.log(this.fadeState);
+   
+   if(this.fadeState = "out"){
     
     this.zoomImage = this.images[this.currIndex];
     
